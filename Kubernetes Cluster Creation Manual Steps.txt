@@ -139,3 +139,21 @@ sudo service jenkins restart
 sudo systemctl enable jenkins
 
 http://52.23.233.195:8080/github-webhook/
+
+
+------------------DOcker-COmpose--------------
+sudo yum install java-1.8.0 -y
+sudo yum install maven -y
+sudo yum install git -y
+sudo yum install -y docker
+sudo systemctl start docker
+sudo setfacl -m user:ec2-user:rw /var/run/docker.sock
+sudo curl -L https://github.com/docker/compose/releases/download/1.20.0/docker-compose-`uname -s`-`uname -m` -o /usr/bin/docker-compose
+sudo chmod +x /usr/bin/docker-compose
+
+clone docker-spring-boot project
+enter into the directory after cloning where you can find pom.xml
+mvn clean install -DskipTests
+docker-compose up
+
+
