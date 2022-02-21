@@ -157,3 +157,62 @@ mvn clean install -DskipTests
 docker-compose up
 
 
+
+
+-------------------------------- Nagios -----------------------
+server: (apache, PHP, GCC compiler)
+sudo su
+amazon-linux-extras install epel -y
+yum install nagios nrpe nagios-plugins-all -y
+chkconfig --level 3 nagios on
+service httpd start
+chkconfig httpd on
+vi /etc/nagios/objects/contacts.cfg
+/usr/sbin/nagios -v /etc/nagios/nagios.cfg
+service nagios start
+service nagios status
+http://<ur IP>/nagios/
+Username: nagiosadmin
+Password: nagiosadmin
+
+--------client--------
+sudo su
+amazon-linux-extras install epel -y
+yum install nrpe nagios-plugins-all openssl -y
+vi /etc/nagios/nrpe.cfg
+systemctl start nrpe
+chkconfig nrpe on
+---------server-------
+cd /etc/nagios
+vi nagios.cfg (uncomment cfg_dir=/etc/nagios/servers)
+mkdir servers
+vi clients.cfg (paste below content)
+
+define host{
+use linux-server
+host_name node1
+alias node1
+address 192.168.7.232 (change to client IP)
+max_check_attempts 
+check_period 24x7
+notification_interval 30
+notification_period 24x7
+}
+
+systemctl restart nagios
+define service {
+   host_name node1
+   service_description PING
+   check_command check_ping!100.0,20%!500.0,60%
+   max_check_attempts 2
+   check_interval 2
+   retry_interval 2
+   check_period 24x7
+   check_freshness 1
+   contact_groups admins
+   notification_interval 2
+   notification_period 24x7
+   notifications_enabled 1
+   register 1
+}
+
