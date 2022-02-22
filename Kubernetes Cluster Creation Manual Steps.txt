@@ -216,3 +216,51 @@ define service {
    register 1
 }
 
+
+
+---------------------------------------------Prometheus-Grafana -------------------------
+<dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+<dependency>
+        <groupId>io.micrometer</groupId>
+        <artifactId>micrometer-registry-prometheus</artifactId>
+</dependency>
+
+management.endpoints.web.exposure.include=health,info,metrics,prometheus
+
+sudo yum install git -y
+sudo yum install java-1.8.0 -y
+sudo yum install maven -y
+sudo yum install -y docker
+sudo systemctl start docker
+sudo setfacl -m user:ec2-user:rw /var/run/docker.sock
+git clone https://github.com/anilkumar23/employee-service.git
+
+
+vi prometheus.yml
+
+global:
+  scrape_interval: 10s
+
+scrape_configs:
+  - job_name: 'spring_micrometer'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['YOUR-MACHINE-IP:8082']
+
+docker run \
+    -p 9090:9090 \
+    -v /home/ec2-user/prometheus.yml:/etc/prometheus/prometheus.yml \
+    prom/prometheus
+
+http://<ur Ip Address>:8082/actuator/prometheus
+
+
+docker run -d -p 3000:3000 grafana/grafana 
+
+http://localhost:3000
+
+https://grafana.com/grafana/dashboards/4701
