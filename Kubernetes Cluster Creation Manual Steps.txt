@@ -264,3 +264,23 @@ docker run -d -p 3000:3000 grafana/grafana
 http://localhost:3000
 
 https://grafana.com/grafana/dashboards/4701
+
+
+
+
+----------------- Task ---------------
+https://github.com/anilkumar23/docker-spring-boot-app/tree/master
+Server List - Kubernetes(work-space) & Jenkins
+Build CI-CD and deploy the above app on Kubernetes cluster.
+1. Create RDS instance of Mysql Database
+2. Fork the project https://github.com/anilkumar23/docker-spring-boot-app/tree/master
+3. Configure application.properties for all the services/applications w.r.t the above RDS endpoint
+4. Create Kubernetes cluster and configure your worker nodes accordingly (use Terraform).
+5. Install Jenkins on seperate server and congigure the above project.
+6. Create Slave node which will be aligned to your kubernetes cluster.
+7. create ECR repositories for all the 5 services and modify deployment&Service.yaml files accordingly (Take reference of employee service project).
+8. Edit Jenkins file and correct few scripts accordingly (Take reference of employee service project).
+9. Configure webhook on your github account for the docker-spring-bootapp repository.
+10. Test the end-to-end scenerio.
+------------------------------------------
+Chrome MySQL Admin 
